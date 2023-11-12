@@ -1,0 +1,33 @@
+//-------------- PRODUCT-CARD -------------//
+
+#sceleton-wrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 300px;
+  .skeleton {
+    // width: 320px;
+    overflow: hidden;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    .content {
+      padding: 10px;
+    }
+  }
+}
+
+//-------------- CATEGORY-CARD -------------//
+
+#category-skeleton {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 15px;
+  width: 100% !important;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  padding: 10px;
+}

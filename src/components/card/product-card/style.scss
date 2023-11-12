@@ -1,0 +1,51 @@
+//--------------- PRODUCT-CARD ------------------//
+
+#card {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 300px;
+  .card {
+    position: relative;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    overflow: hidden;
+    &__img {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      .quantity{
+        position: absolute;
+        padding: 3px 5px;
+        z-index: 2;
+        right: 10px;
+        bottom: 10px;
+        font-size: 12px;
+        background-color: darkcyan;
+        color: white;
+        border-radius: 10px;
+      }
+    }
+    &__content {
+      padding: 20px;
+      padding-bottom: 10px;
+      .title {
+        margin-bottom: 5px;
+      }
+      .description {
+        margin-bottom: 15px;
+      }
+      &__bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .favourite {
+      position: absolute;
+      right: 0px;
+    }
+  }
+}
