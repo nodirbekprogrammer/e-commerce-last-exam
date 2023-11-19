@@ -1,3 +1,4 @@
+import PublicRegisterForm from "@/components/sections/register/Register";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,9 +8,7 @@ export const metadata: Metadata = {
 
 const Register = () => {
   return (
-    <div style={{ marginTop: "100px" }}>
-      <h1>Register</h1>
-    </div>
+    <PublicRegisterForm/>
   );
 };
 

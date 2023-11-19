@@ -1,31 +1,51 @@
-#header{
+.header {
   height: 100px;
-  .nav{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+  transition: .4s;
+  .nav {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    &__left{
+    &__left {
       display: flex;
       align-items: center;
       gap: 50px;
     }
-    &__right{
+    &__right {
       display: flex;
       align-items: center;
       gap: 50px;
-      &__menu{
+      &__menu {
         display: flex;
         align-items: center;
         gap: 10px;
       }
-      &__auth{
+      &__auth {
         display: flex;
         align-items: center;
         gap: 10px;
       }
     }
-
+    @media (max-width: 768px) {
+      &__left {
+        &__menu {
+          display: none;
+        }
+      }
+      &__right {
+        display: none;
+      }
+    }
   }
+}
+
+#shrinked{
+  height: 70px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }

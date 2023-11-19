@@ -8,7 +8,7 @@ import useCategories from "@/states/categories";
 import CategoryCardSkeleton from "@/components/shares/skeleton/CategoryCardSkeleton";
 
 const Categories = () => {
-  const { data: categories, getData: getCategories, loading } = useCategories();
+  const { data: categories, getCategories, loading } = useCategories();
 
   useEffect(() => {
     getCategories();

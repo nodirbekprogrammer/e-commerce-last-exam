@@ -26,7 +26,7 @@ const Products = () => {
     setPage,
   } = ProductsHook();
 
-  const { data: categories, getData: getCategories } = useCategories();
+  const { data: categories, getCategories } = useCategories();
 
   useEffect(() => {
     getCategories();
@@ -72,7 +72,7 @@ const Products = () => {
                 key={product?._id}
                 title={product?.title ? product?.title : "Lorem ipsum dolor!"}
                 description={
-                  product?.description.length > 0
+                  product?.description?.length > 0
                     ? product?.description.slice(0, 60)
                     : "Lorem ipsum dolor sit amet"
                 }

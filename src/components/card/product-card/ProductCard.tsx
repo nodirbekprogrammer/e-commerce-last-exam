@@ -1,13 +1,16 @@
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Skeleton from "@mui/material/Skeleton";
+
 import IconButton from "@mui/material/IconButton";
-
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-
 import Favourite from "@/components/shares/Favourite";
 
+import useCart from "@/states/cart";
+
 import "./style.scss";
+// import useFavorite from "@/states/favorite";
+// import ProductData from "@/types/productData";
 
 type PropTypes = {
   title: string;
@@ -24,15 +27,34 @@ const ProductCard = ({
   price,
   imageUrl,
   id,
-  quantity
+  quantity,
 }: PropTypes) => {
+  const addToCart = useCart((state) => state.addToCart);
+  // const { favorites, addToFavorites, removeFromFavorites } = useFavorite();
+
+  // const isFavorite = (productId: string) => {
+  //   return favorites.some(
+  //     (favoriteProduct) => favoriteProduct.id === productId
+  //   );
+  // };
+
+  // const handleToggleFavorite = () => {
+  //   if (isFavorite(id)) {
+  //     removeFromFavorites(id);
+  //   } else {
+  //     addToFavorites({ title, description, price, imageUrl, id, quantity });
+  //   }
+  // };
+  const handleAddToCart = () => {
+    addToCart({ title, description, price, imageUrl, id, quantity });
+  };
+
   return (
     <div id="card">
       <div className="card">
         <div className="card__img">
-          
           <Image fill objectFit="cover" src={imageUrl} alt="product-image" />
-          <Favourite />
+          <Favourite/>
           <span className="quantity">{quantity} dona</span>
         </div>
         <div className="card__content">
@@ -51,7 +73,7 @@ const ProductCard = ({
             <p className="price">
               {price} {`so'm`}
             </p>
-            <IconButton size="large" color="primary">
+            <IconButton onClick={handleAddToCart} size="large" color="primary">
               <AddShoppingCartOutlinedIcon />
             </IconButton>
           </div>

@@ -1,3 +1,4 @@
+import PublicLoginForm from "@/components/sections/login/Login";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,11 +7,7 @@ export const metadata: Metadata = {
 };
 
 const Login = () => {
-  return (
-    <div style={{ marginTop: "100px" }}>
-      <h1 className="">Login</h1>
-    </div>
-  );
+  return <PublicLoginForm />;
 };
 
 export default Login;

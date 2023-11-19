@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { toast } from "react-toastify";
 
 import { request } from "@/server/request";
 import ApiData from "@/types/api";
@@ -17,6 +18,9 @@ interface ProductStates {
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   setPage: (e: React.ChangeEvent<unknown>, page: number) => void;
+  addProduct: (product: ProductType, selected: string | null) => void;
+  editProduct: (product: ProductType, id: string) => void;
+  deleteProduct: (id: string) => void;
 }
 
 const params =
@@ -27,7 +31,7 @@ const params =
 const category = params ? params.get("category") : "";
 const search = params ? params.get("search") : "";
 
-const ProductsHook = create<ProductStates>((set, get) => {
+const useProducts = create<ProductStates>((set, get) => {
   return {
     loading: false,
     data: [],
@@ -52,6 +56,39 @@ const ProductsHook = create<ProductStates>((set, get) => {
         set({ loading: false });
       }
     },
+    addProduct: async (product, selected) => {
+      try {
+        set({ loading: true });
+        if (selected === null) {
+          await request.post("product", product);
+        } else {
+          await request.put(`product/${selected}`, product);
+        }
+        toast.success("Changed successfully");
+        get().getData();
+      } finally {
+        set({ loading: false });
+      }
+    },
+    editProduct: async (product, id) => {
+      try {
+        set({ loading: true });
+        await request.put(`product/${id}`, product);
+        toast.success("Information edited successfully");
+      } finally {
+        set({ loading: false });
+      }
+    },
+    deleteProduct: async (id) => {
+      try {
+        set({ loading: true });
+        await request.delete(`product/${id}`);
+        await get().getData();
+        toast.info("Product deleted");
+      } finally {
+        set({ loading: false });
+      }
+    },
     handleCategory: (e) => {
       const { category, page } = get();
 
@@ -72,4 +109,4 @@ const ProductsHook = create<ProductStates>((set, get) => {
   };
 });
 
-export default ProductsHook;
+export default useProducts;
