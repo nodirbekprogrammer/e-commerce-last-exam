@@ -256,7 +256,7 @@ export default function MiniDrawer({ children }: ChildrenType) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Link href="orders">
+              <Link href="admin/orders">
                 <Badge badgeContent={100} color="error">
                   <NotificationsIcon sx={{color:"white"}}/>
                 </Badge>
