@@ -9,12 +9,16 @@ import ProductType from "@/types/product";
 
 interface ProductStates {
   search: string;
-  category: string | null;
+  category: string | number | readonly string[] | undefined;
   total: number;
   page: number;
   loading: boolean;
   data: ProductType[];
-  getData: (search: string | null, category: string, page: number) => void;
+  getData: (
+    search: string | null,
+    category: string | number | readonly string[] | undefined,
+    page: number
+  ) => void;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   setPage: (e: React.ChangeEvent<unknown>, page: number) => void;

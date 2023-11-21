@@ -7,6 +7,7 @@ interface ProductType {
   description: string;
   image: {
     url: string;
+    public_id: string;
   };
   quantity: number;
   category: string;

@@ -74,7 +74,7 @@ const crud = <T>(url: string) => {
           price: "",
           image: {
             url: "",
-            public_id: "",
+            // public_id: "",
           },
           quantity: "",
         });
