@@ -8,6 +8,7 @@ import ChangePasswordForm from "@/components/form/ChangePasswordForm";
 import useAuth from "@/states/auth";
 import { useRouter } from "next/navigation";
 import "./style.scss";
+import Loading from "@/components/shares/loading/Loading";
 
 const AccountPage = () => {
   const {
@@ -37,7 +38,7 @@ const AccountPage = () => {
       <div className="accountPage">
         <div className="formBox">
           {loading ? (
-            "Yuklanyapti..."
+            <Loading/>
           ) : (
             <Fragment>
               <div className="user-info">
