@@ -218,7 +218,7 @@ const ProductsPage = () => {
         </TableContainer>
       )}
 
-      <div>
+      <div className="pagination">
         {!loading && total > LIMIT ? (
           <Pagination
             count={pageSize}

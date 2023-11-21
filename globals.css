@@ -35,3 +35,9 @@ a {
   background-color: #008b8b !important;
   color: #fff;
 }
+
+.pagination{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}

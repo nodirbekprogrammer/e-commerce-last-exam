@@ -190,7 +190,7 @@ const Users = () => {
           </Table>
         </TableContainer>
       )}
-      <div>
+      <div className="pagination">
         {!loading && total > LIMIT ? (
           <Pagination
             count={pageSize}
