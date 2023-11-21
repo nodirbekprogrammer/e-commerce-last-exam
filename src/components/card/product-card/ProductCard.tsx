@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import Favourite from "@/components/shares/Favourite";
 
-import useCart from "@/states/cart";
+import useCart from "@/states/public/cart";
 
 import "./style.scss";
 // import useFavorite from "@/states/favorite";
@@ -54,7 +54,7 @@ const ProductCard = ({
       <div className="card">
         <div className="card__img">
           <Image fill objectFit="cover" src={imageUrl} alt="product-image" />
-          <Favourite/>
+          <Favourite />
           <span className="quantity">{quantity} dona</span>
         </div>
         <div className="card__content">

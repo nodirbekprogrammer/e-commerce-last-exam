@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@mui/material";
 import theme from "../MUI";
 
 import ChildrenType from "@/types/children";
-
+import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../../globals.css";
@@ -24,7 +25,10 @@ export default function RootLayout({ children }: ChildrenType) {
   return (
     <html lang="en">
       <ThemeProvider theme={theme}>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <ToastContainer position="top-center" autoClose={2000} />
+          {children}
+        </body>
       </ThemeProvider>
     </html>
   );

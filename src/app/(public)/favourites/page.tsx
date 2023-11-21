@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import React from 'react'
 
-import FavoritesSection from '@/components/sections/favorites/Favorites';
+import FavoritesSection from '@/components/sections/public/favorites/Favorites';
 
 export const metadata: Metadata = {
   title: "Amazon | Sevimlilar",

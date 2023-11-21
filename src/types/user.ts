@@ -2,7 +2,6 @@ export interface UserApi {
   user: UserType;
 }
 
-
 export interface UserType {
   role: number;
   _id: string;

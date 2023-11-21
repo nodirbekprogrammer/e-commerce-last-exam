@@ -1,17 +1,22 @@
+import { ENDPOINT, TOKEN } from "@/constants";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export const request = axios.create({
-  baseURL: "https://ap-vodiy-parfum-backend.up.railway.app/api/v1",
+  baseURL: `${ENDPOINT}api/v1`,
   timeout: 10000,
+  headers: {
+    Authorization: `Bearer ${Cookies.get(TOKEN)}`,
+    "Access-Control-Allow-Origin": "*",
+    HTTPS: "200",
+  },
 });
 
 request.interceptors.response.use(
-  async (response) => {
-    return response;
-  },
+  (response) => response,
   (err) => {
-    console.log(err);
-    
+    toast.error(err.response.data.msg);
     return Promise.reject(err);
   }
 );

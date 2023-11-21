@@ -1,4 +1,4 @@
-import PublicRegisterForm from "@/components/sections/register/Register";
+import PublicRegisterForm from "@/components/sections/public/register/Register";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

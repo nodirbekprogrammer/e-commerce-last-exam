@@ -1,6 +1,6 @@
 import React from 'react'
 import { Metadata } from "next";
-import MyCart from '@/components/sections/my-cart/MyCart';
+import MyCart from '@/components/sections/public/my-cart/MyCart';
 
 
 export const metadata: Metadata = {

@@ -1,0 +1,26 @@
+.edit{
+    margin-right: 20px;
+    path{
+        fill: blue;
+    }
+
+    cursor: pointer;
+}
+.delete{
+    path{
+        fill: red;
+    }
+
+    cursor: pointer;
+}
+.inputBox{
+    width: 70% !important;
+
+    position: relative;
+
+    svg{
+        position: absolute;
+        top: 16px;
+        right: 15px;
+    }
+}

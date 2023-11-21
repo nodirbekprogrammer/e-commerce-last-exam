@@ -1,72 +1,92 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Badge from "@mui/material/Badge";
+import MuiDrawer from "@mui/material/Drawer";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Button from "@mui/material/Button";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PeopleIcon from "@mui/icons-material/People";
+import GradingIcon from "@mui/icons-material/Grading";
+import CategoryIcon from "@mui/icons-material/Category";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import { Container } from "@mui/material";
 import ChildrenType from "@/types/children";
-import { useRouter } from 'next/navigation';
+import useAuthCheck from "@/hooks/authCheck";
+import Link from "next/link";
 import useAuth from "@/states/auth";
-import {toast} from "react-toastify";
-import Cookies from "js-cookie";
-import { USER_DATA, USER_TOKEN } from "@/constants";
-import Link from 'next/link'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+const drawerWidth = 240;
 
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import LogoutIcon from '@mui/icons-material/Logout';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import CategoryIcon from '@mui/icons-material/Category';
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
 
-// import useScreenSize from "@/utils/useScreen";
-import "./dashboard.scss";
-import { usePathname } from 'next/navigation'
-
-
-
-const drawerWidth: number = 240;
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -76,259 +96,260 @@ const AppBar = styled(MuiAppBar, {
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    backgroundColor: "#008b8b",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
 }));
 
-const defaultTheme = createTheme();
-
-export default function Dashboard({ children }: ChildrenType) {
-  // const screenSize = useScreenSize();
-  const { isAuthenticated, user, setIsAuthenticated } = useAuth();
-  const [open, setOpen] = useState(true);
+export default function MiniDrawer({ children }: ChildrenType) {
   const router = useRouter();
-  const [openModal, setOpenModal] = useState(false);
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    React.useState<null | HTMLElement>(null);
 
-  const pathname = usePathname();
-  console.log(pathname)
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (user?.role !== 1) {
-        router.push("/")
-      }
-    } else {
-      router.push("/login")
-    }
-  }, [isAuthenticated, router, user?.role])
+  const { logout } = useAuth();
 
-  // useEffect(() => {
-  //   if (screenSize < 650) {
-  //     setOpen(false);
-  //   } else {
-  //     setOpen(true)
-  //   }
-  // }, [screenSize])
-  
-  const toggleDrawer = () => {
-    setOpen(!open);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
 
-  const logout = () => {
-    localStorage.removeItem(USER_DATA);
-    Cookies.remove(USER_TOKEN);
-    setIsAuthenticated(user);
-    setOpenModal(false);
-    toast.info("You are logged out")
-    router.push("/")
-  }
-
-  const handleClickOpen = () => {
-    setOpenModal(true);
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
 
-  const handleClose = () => {
-    setOpenModal(false);
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  useAuthCheck();
+
+  const menuId = "primary-search-account-menu";
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem sx={{ justifyContent: "center", color: "black" }}>
+        <Link href="/admin/account">Account</Link>
+      </MenuItem>
+      <Divider />
+      <MenuItem>
+        <Button
+          sx={{ textTransform: "none" }}
+          color="error"
+          endIcon={<LogoutIcon />}
+          variant="outlined"
+          onClick={() => logout(router)}
+        >
+          Log out
+        </Button>
+      </MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = "primary-search-account-menu-mobile";
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge badgeContent={17} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <p>Notifications</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
+  );
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Dialog
-        open={openModal}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you want to log out ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={logout} autoFocus>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Box sx={{ display: "flex", position: "fixed", inset: "0" }}>
-        <CssBaseline />
-        <AppBar
-          style={{ backgroundColor: "#008b8b" }}
-          position="absolute"
-          open={open}
-        >
-          <Toolbar
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
             sx={{
-              pr: "24px",
+              marginRight: 5,
+              ...(open && { display: "none" }),
             }}
           >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Admin
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
-              className="dashboard-toggle"
-              edge="start"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon style={{ fill: "#fff" }} />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
+              size="large"
+              aria-label="show 17 new notifications"
               color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
             >
-              Vodiy Perfume
-            </Typography>
-            <IconButton style={{ color: "#fff" }}>
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              <Link href="orders">
+                <Badge badgeContent={100} color="error">
+                  <NotificationsIcon sx={{color:"white"}}/>
+                </Badge>
+              </Link>
             </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className="dashboard-sidebar"
-          style={{ backgroundColor: "#F67449" }}
-          variant="permanent"
-          open={open}
-        >
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
+            <IconButton
+              size="large"
+              edge="end"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
               <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List className="nav" component="nav">
-            <React.Fragment>
-              <Link
-                className={`dashboard-link ${
-                  pathname === "/admin" ? "active" : ""
-                }`}
-                href="/admin"
-              >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </Link>
-              <Link
-                className={`dashboard-link ${
-                  pathname === "/admin/users" ? "active" : ""
-                }`}
-                href="/admin/users"
-              >
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Users" />
-              </Link>
-              <Link
-                className={`dashboard-link ${
-                  pathname === "/admin/allorders" ? "active" : ""
-                }`}
-                href="/admin/allorders"
-              >
-                <ListItemIcon>
-                  <Inventory2Icon />
-                </ListItemIcon>
-                <ListItemText primary="Orders" />
-              </Link>
-              <Link
-                className={`dashboard-link ${
-                  pathname === "/admin/categories" ? "active" : ""
-                }`}
-                href="/admin/categories"
-              >
-                <ListItemIcon>
-                  <CategoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="Categories" />
-              </Link>
-              <Link
-                className={`dashboard-link ${
-                  pathname === "/admin/products" ? "active" : ""
-                }`}
-                href="/admin/products"
-              >
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Products" />
-              </Link>
-            </React.Fragment>
-            <Divider sx={{ my: 3, color: "#fff" }} />
-            <Link
-              className={`dashboard-link ${
-                pathname === "/admin/profile" ? "active" : ""
-              }`}
-              href="/admin/profile"
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Account" />
-            </Link>
-            <ListItemButton
-              className="dashboard-link"
-              onClick={handleClickOpen}
-            >
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? "theme.palette.grey[100]"
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {children}
-          </Container>
-        </Box>
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List component="nav">
+          <ListItemButton onClick={() => router.push("/admin")}>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItemButton>
+          <ListItemButton onClick={() => router.push("/admin/users")}>
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Users" />
+          </ListItemButton>
+          <ListItemButton onClick={() => router.push("/admin/products")}>
+            <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Products" />
+          </ListItemButton>
+
+          <ListItemButton onClick={() => router.push("/admin/category")}>
+            <ListItemIcon>
+              <CategoryIcon />
+            </ListItemIcon>
+            <ListItemText primary="Categories" />
+          </ListItemButton>
+          <ListItemButton onClick={() => router.push("/admin/orders")}>
+            <ListItemIcon>
+              <GradingIcon />
+            </ListItemIcon>
+            <ListItemText primary="Orders" />
+          </ListItemButton>
+          <Divider sx={{ my: 1 }} />
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+      >
+        <Toolbar />
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          {children}
+        </Container>
       </Box>
-    </ThemeProvider>
+      {renderMobileMenu}
+      {renderMenu}
+    </Box>
   );
 }

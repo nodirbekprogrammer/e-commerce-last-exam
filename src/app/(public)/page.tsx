@@ -1,12 +1,12 @@
-import {Fragment} from "react"
+import { Fragment } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Amazon.uz",
   description: "Amazon Home Page",
 };
-import LatestProducts from "@/components/sections/latestProducts/LatestProducts";
-import Categories from "@/components/sections/categories/Categories";
+import LatestProducts from "@/components/sections/public/latestProducts/LatestProducts";
+import Categories from "@/components/sections/public/categories/Categories";
 
 const Home = () => {
   return (

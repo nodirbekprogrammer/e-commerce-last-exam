@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Fragment } from "react";
 
 import childrenType from "@/types/children";
-import Header from "@/components/sections/header/Header";
+import Header from "@/components/sections/public/header/Header";
 
 export const metadata: Metadata = {
   title: "Amazon | Mahsuoltlar",

@@ -4,9 +4,9 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import useCart from "@/states/cart";
+import useCart from "@/states/public/cart";
 
-import "./style.scss"
+import "./style.scss";
 
 type PropTypes = {
   title: string;
@@ -15,7 +15,7 @@ type PropTypes = {
   imageUrl: string;
   id: string;
   quantity: number;
-  isIncreaseDisabled: boolean
+  isIncreaseDisabled: boolean;
 };
 
 const CartCard = ({
